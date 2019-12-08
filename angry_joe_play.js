@@ -25,11 +25,10 @@ handlers.sendHighScore = function (args, context) {
 
         if (gameTimeSeconds < minTimeValueSeconds || gameTimeSeconds > maxTimeValueSeconds) {
             resetStartGameStamp();
-            // TODO remove message
-            return { messageValue: `Failed to update! gameTime: ${gameTimeSeconds} - minTime: ${minTimeValueSeconds} - maxTime ${maxTimeValueSeconds}` };
+            return { messageValue: `Failed to update!` };
         }
     } else {
-        return { messageValue: `Failed to update! Invalid params. Debug timestamp ${startGameTimestamp} - gameTime: ${gameTimeSeconds} - minTime: ${minTimeValueSeconds} - maxTime ${maxTimeValueSeconds}` };
+        return { messageValue: `Failed to update! Invalid params.` };
     }
 
     resetStartGameStamp();
@@ -51,9 +50,7 @@ handlers.sendHighScore = function (args, context) {
 
     server.UpdatePlayerStatistics(requestGlobal);
     server.UpdatePlayerStatistics(requestWeekly);
-    // return { messageValue: `Updated score: ${score}` };
-    // TODO remove message
-    return { messageValue: `Updated score: ${score}!! Debug timestamp ${startGameTimestamp} - gameTime: ${gameTimeSeconds} - minTime: ${minTimeValueSeconds} - maxTime ${maxTimeValueSeconds}` };
+    return { messageValue: `Updated score: ${score}` };
 }
 
 
