@@ -25,9 +25,11 @@ handlers.sendHighScore = function (args, context) {
 
         if (gameTimeSeconds < minTimeValueSeconds || gameTimeSeconds > maxTimeValueSeconds) {
             resetStartGameStamp();
+            sendFailedEvent(score, gameTimeSeconds);
             return { messageValue: `Failed to update!` };
         }
     } else {
+        sendFailedEvent(score, gameTimeSeconds);
         return { messageValue: `Failed to update! Invalid params.` };
     }
 
@@ -50,6 +52,7 @@ handlers.sendHighScore = function (args, context) {
 
     server.UpdatePlayerStatistics(requestGlobal);
     server.UpdatePlayerStatistics(requestWeekly);
+
     return { messageValue: `Updated score: ${score}` };
 }
 
@@ -61,6 +64,7 @@ handlers.startGame = function (args, context) {
             start_timestamp: Date.now()
         }
     });
+
     return { messageValue: "Game started!" };
 };
 
@@ -69,6 +73,17 @@ function resetStartGameStamp() {
         PlayFabId: currentPlayerId,
         Data: {
             start_timestamp: -1
+        }
+    });
+}
+
+function sendFailedEvent(score, gameTimeSeconds) {
+    server.WritePlayerEvent({
+        PlayFabId: currentPlayerId,
+        EventName: "failed_update_highscore",
+        Body: {
+            score,
+            gameTime: gameTimeSeconds
         }
     });
 }
